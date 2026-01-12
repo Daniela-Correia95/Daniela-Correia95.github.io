@@ -24,7 +24,7 @@ function openModal(editItem) {
         state.editingId = editItem.id
         qs('#formTitle').textContent = 'Editar item'
         qs('#typeSelect').value = editItem.type
-        qs('#nameInput').value = editItem.name
+        qs('#nameInput').value = titleCase(editItem.name || '')
         qs('#yearInput').value = editItem.year || ''
         qs('#ratingInput').value = editItem.rating || 5
     } else {
@@ -36,6 +36,15 @@ function openModal(editItem) {
         qs('#ratingInput').value = 5
         qs('#imageInput').value = ''
     }
+}
+
+function titleCase(s) {
+    if (!s) return ''
+    return s.split(/\s+/).map(w => {
+        const first = w.charAt(0)
+        const rest = w.slice(1)
+        return first.toUpperCase() + rest.toLowerCase()
+    }).join(' ')
 }
 
 function closeModal() {
@@ -104,6 +113,11 @@ function setupUI() {
     qs('#addItemBtn').addEventListener('click', () => openModal())
     qs('#cancelBtn').addEventListener('click', () => closeModal())
 
+    // auto-capitalize name on blur
+    qs('#nameInput').addEventListener('blur', () => {
+        qs('#nameInput').value = titleCase(qs('#nameInput').value.trim())
+    })
+
     // Export / Import
     qs('#exportBtn').addEventListener('click', () => exportLocalStorage())
     qs('#importBtn').addEventListener('click', () => qs('#importFileInput').click())
@@ -116,7 +130,7 @@ function setupUI() {
     qs('#itemForm').addEventListener('submit', async (e) => {
         e.preventDefault()
         const type = qs('#typeSelect').value
-        const name = qs('#nameInput').value.trim()
+        const name = titleCase(qs('#nameInput').value.trim())
         const year = qs('#yearInput').value.trim()
         const rating = Number(qs('#ratingInput').value) || 5
         const file = qs('#imageInput').files[0]
