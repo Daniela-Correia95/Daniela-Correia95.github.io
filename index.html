@@ -1,11 +1,68 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
-  <meta charset="UTF-8">
-  <title>Meu site</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Minhas listas - Filmes & Games</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-  <h1>Funcionou 🎉</h1>
-  <p>Esse site está no GitHub Pages sem gastar um centavo.</p>
+    <main class="container">
+        <header>
+            <h1>Listas: Filmes & Games</h1>
+            <p>Adicione, edite, remova e reorganize itens. Dados salvos no seu navegador.</p>
+        </header>
+
+        <section class="controls">
+            <div class="tabs">
+                <button class="tab-button active" data-type="movies">Filmes</button>
+                <button class="tab-button" data-type="games">Games</button>
+            </div>
+            <button id="addItemBtn" class="primary">Adicionar</button>
+        </section>
+
+        <section id="listSection">
+            <ul id="itemsList" class="items-list" aria-live="polite"></ul>
+        </section>
+
+        <template id="itemTemplate">
+            <li class="item" draggable="true">
+                <img class="thumb" alt="imagem">
+                <div class="meta">
+                    <strong class="name"></strong>
+                    <div class="details"><span class="year"></span> · <span class="rating"></span></div>
+                </div>
+                <div class="actions">
+                    <button class="edit">Editar</button>
+                    <button class="delete">Excluir</button>
+                </div>
+            </li>
+        </template>
+
+        <div id="modal" class="modal hidden">
+            <form id="itemForm" class="modal-content">
+                <h2 id="formTitle">Adicionar item</h2>
+                <label>Tipo
+                    <select id="typeSelect">
+                        <option value="movies">Filme</option>
+                        <option value="games">Game</option>
+                    </select>
+                </label>
+                <label>Nome <input id="nameInput" required></label>
+                <label>Ano <input id="yearInput" type="number" min="1800" max="2100"></label>
+                <label>Vontade (1-10) <input id="ratingInput" type="number" min="1" max="10" value="5"></label>
+                <label>Imagem (opcional) <input id="imageInput" type="file" accept="image/*"></label>
+                <div class="form-actions">
+                    <button type="submit" class="primary">Salvar</button>
+                    <button type="button" id="cancelBtn">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script src="app.js" defer></script>
 </body>
+
 </html>
