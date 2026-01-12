@@ -1,5 +1,5 @@
 const STORAGE_KEY = 'minhaslistas:v1'
-let state = { items: [], type: 'movies', editingId: null }
+let state = { items: [], type: 'movies', editingId: null, sortByRating: false }
 
 function loadState() {
     try {
@@ -55,7 +55,10 @@ function closeModal() {
 function renderList() {
     const list = qs('#itemsList')
     list.innerHTML = ''
-    const items = state.items.filter(i => i.type === state.type)
+    let items = state.items.filter(i => i.type === state.type)
+    if (state.sortByRating) {
+        items = items.slice().sort((a, b) => (b.rating || 0) - (a.rating || 0))
+    }
     for (const it of items) {
         const template = qs('#itemTemplate')
         const node = template.content.firstElementChild.cloneNode(true)
@@ -68,7 +71,7 @@ function renderList() {
         else img.removeAttribute('src')
         node.querySelector('.edit').addEventListener('click', () => openModal(it))
         node.querySelector('.delete').addEventListener('click', () => { deleteItem(it.id) })
-        addDragHandlers(node)
+        if (!state.sortByRating) addDragHandlers(node)
         list.appendChild(node)
     }
 }
@@ -112,6 +115,14 @@ function setupUI() {
 
     qs('#addItemBtn').addEventListener('click', () => openModal())
     qs('#cancelBtn').addEventListener('click', () => closeModal())
+
+    // sort toggle
+    qs('#sortBtn').addEventListener('click', () => {
+        state.sortByRating = !state.sortByRating
+        qs('#sortBtn').classList.toggle('active', state.sortByRating)
+        saveState()
+        renderList()
+    })
 
     // auto-capitalize name on blur
     qs('#nameInput').addEventListener('blur', () => {
