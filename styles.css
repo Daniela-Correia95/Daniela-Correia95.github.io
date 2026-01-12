@@ -66,6 +66,29 @@ header h1 {
     cursor: pointer
 }
 
+.controls-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.controls-actions .secondary {
+    background: var(--accent);
+    color: var(--accent-contrast);
+    border: none;
+    padding: 8px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.controls-actions .secondary .material-icons {
+    font-size: 18px;
+    line-height: 1;
+}
+
 #itemsList {
     list-style: none;
     padding: 0;
@@ -155,6 +178,104 @@ header h1 {
     flex-direction: column;
     gap: 6px;
     font-size: 0.95rem
+}
+
+/* Styled select inside modal */
+.modal-content select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    color: #e6eef8;
+    padding: 10px 40px 10px 12px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e6eef8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 18px;
+}
+
+.modal-content select:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+    border-color: var(--accent);
+}
+
+.modal-content select option {
+    background: var(--card);
+    color: #e6eef8;
+}
+
+/* Inputs in modal */
+.modal-content input[type="text"],
+.modal-content input[type="number"],
+.modal-content input[type="file"],
+.modal-content input[type="email"],
+.modal-content input[type="search"] {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    color: #e6eef8;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+}
+
+.modal-content input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+.modal-content input[type="number"]::-webkit-outer-spin-button,
+.modal-content input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* File input: show a custom label-like look using the native control where possible */
+.modal-content input[type="file"] {
+    padding: 8px 12px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+}
+
+.modal-content input:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.08);
+    border-color: var(--accent);
+}
+
+/* Inputs without explicit type (e.g. <input id="nameInput">) */
+.modal-content input:not([type="file"]) {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    color: #e6eef8;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+}
+
+.modal-content input::placeholder {
+    color: rgba(230, 238, 248, 0.6);
+}
+
+/* Secondary button used for Cancel in modal (visually similar to primary but neutral) */
+.secondary-button {
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--muted);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.secondary-button:hover {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.secondary-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.06);
+    border-color: rgba(255, 255, 255, 0.12);
 }
 
 .form-actions {

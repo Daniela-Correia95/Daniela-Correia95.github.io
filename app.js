@@ -53,7 +53,7 @@ function renderList() {
         node.dataset.id = it.id
         node.querySelector('.name').textContent = it.name
         node.querySelector('.year').textContent = it.year || ''
-        node.querySelector('.rating').textContent = `Vontade: ${it.rating || 5}/10`
+        node.querySelector('.rating').textContent = `Interesse: ${it.rating || 5}/10`
         const img = node.querySelector('.thumb')
         if (it.image) img.src = it.image
         else img.removeAttribute('src')
@@ -104,6 +104,15 @@ function setupUI() {
     qs('#addItemBtn').addEventListener('click', () => openModal())
     qs('#cancelBtn').addEventListener('click', () => closeModal())
 
+    // Export / Import
+    qs('#exportBtn').addEventListener('click', () => exportLocalStorage())
+    qs('#importBtn').addEventListener('click', () => qs('#importFileInput').click())
+    qs('#importFileInput').addEventListener('change', e => {
+        const file = e.target.files[0]
+        if (file) importLocalStorageFile(file)
+        e.target.value = ''
+    })
+
     qs('#itemForm').addEventListener('submit', async (e) => {
         e.preventDefault()
         const type = qs('#typeSelect').value
@@ -123,6 +132,61 @@ function setupUI() {
     })
 
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal() })
+}
+
+function exportLocalStorage() {
+    const obj = {}
+    for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i)
+        obj[k] = localStorage.getItem(k)
+    }
+    const blob = new Blob([JSON.stringify(obj, null, 2)], { type: 'application/json' })
+    const a = document.createElement('a')
+    a.href = URL.createObjectURL(blob)
+    a.download = 'localstorage.json'
+    a.click()
+    URL.revokeObjectURL(a.href)
+}
+
+function importLocalStorageFile(file) {
+    const reader = new FileReader()
+    reader.onload = () => {
+        try {
+            const obj = JSON.parse(reader.result)
+            // decide merge or replace
+            const choice = confirm('Deseja mesclar os dados importados com os dados atuais? OK = Mesclar, Cancel = Substituir')
+            if (choice) {
+                Object.entries(obj).forEach(([k, v]) => {
+                    // merge for the app's STORAGE_KEY: merge items arrays by id
+                    if (k === STORAGE_KEY) {
+                        try {
+                            const incoming = JSON.parse(v)
+                            const current = JSON.parse(localStorage.getItem(k) || '{}')
+                            const curItems = current.items || []
+                            const incItems = incoming.items || []
+                            const mergedMap = new Map()
+                            curItems.concat(incItems).forEach(it => mergedMap.set(it.id, it))
+                            const merged = { ...incoming, items: Array.from(mergedMap.values()) }
+                            localStorage.setItem(k, JSON.stringify(merged))
+                        } catch (e) {
+                            localStorage.setItem(k, v)
+                        }
+                    } else {
+                        localStorage.setItem(k, v)
+                    }
+                })
+            } else {
+                // replace: clear and set
+                localStorage.clear()
+                Object.entries(obj).forEach(([k, v]) => localStorage.setItem(k, v))
+            }
+            loadState(); renderList();
+            alert('Importação concluída')
+        } catch (e) {
+            alert('Arquivo inválido')
+        }
+    }
+    reader.readAsText(file)
 }
 
 function addDragHandlers(node) {

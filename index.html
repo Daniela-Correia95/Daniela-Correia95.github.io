@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Minhas listas - Filmes & Games</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
 </head>
 
 <body>
@@ -20,7 +21,16 @@
                 <button class="tab-button active" data-type="movies">Filmes</button>
                 <button class="tab-button" data-type="games">Games</button>
             </div>
-            <button id="addItemBtn" class="primary">Adicionar</button>
+            <div class="controls-actions">
+                <button id="addItemBtn" class="primary">Adicionar</button>
+                <button id="exportBtn" class="secondary" title="Exportar">
+                    <span class="material-icons">file_download</span>
+                </button>
+                <button id="importBtn" class="secondary" title="Importar">
+                    <span class="material-icons">file_upload</span>
+                </button>
+                <input id="importFileInput" type="file" accept="application/json" style="display:none">
+            </div>
         </section>
 
         <section id="listSection">
@@ -52,11 +62,11 @@
                 </label>
                 <label>Nome <input id="nameInput" required></label>
                 <label>Ano <input id="yearInput" type="number" min="1800" max="2100"></label>
-                <label>Vontade (1-10) <input id="ratingInput" type="number" min="1" max="10" value="5"></label>
+                <label>Interesse (1-10) <input id="ratingInput" type="number" min="1" max="10" value="5"></label>
                 <label>Imagem (opcional) <input id="imageInput" type="file" accept="image/*"></label>
                 <div class="form-actions">
                     <button type="submit" class="primary">Salvar</button>
-                    <button type="button" id="cancelBtn">Cancelar</button>
+                    <button type="button" id="cancelBtn" class="secondary-button">Cancelar</button>
                 </div>
             </form>
         </div>
